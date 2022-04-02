@@ -27,7 +27,7 @@ public class User {
     @NotBlank(message = "Name cannot be blank")
    private String name;
 
-   @Enumerated(EnumType.ORDINAL)
+   @Enumerated(EnumType.STRING)
    private Role role;
     
    private String password; 

@@ -1,5 +1,8 @@
 package com.deshaware.shuttleservice.dto;
 
+
+import com.deshaware.shuttleservice.model.Role;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
  public class RegisterRequest {
     private String email;
-    private String username;
+    private String name;
     private String password;
-    private String role;
+    private Role role;
 
 }
