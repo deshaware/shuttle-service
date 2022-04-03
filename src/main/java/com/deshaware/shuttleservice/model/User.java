@@ -2,6 +2,7 @@ package com.deshaware.shuttleservice.model;
 
 import java.time.Instant;
 
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {

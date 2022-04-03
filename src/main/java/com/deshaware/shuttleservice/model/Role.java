@@ -1,5 +1,12 @@
 package com.deshaware.shuttleservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum Role {
-    ADMIN, DRIVER, USER
+    @JsonProperty("admin")
+    ADMIN, 
+    @JsonProperty("driver")
+    DRIVER, 
+    @JsonProperty("user")
+    USER
 }
