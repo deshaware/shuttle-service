@@ -1,11 +1,17 @@
 package com.deshaware.shuttleservice.service;
 
+import java.util.List;
+
 import com.deshaware.shuttleservice.dto.ShuttleRequest;
+import com.deshaware.shuttleservice.model.Shuttle;
+
 import org.springframework.http.ResponseEntity;
 
 public interface ShuttleService {
 
     public ResponseEntity<?> addShuttle(ShuttleRequest shuttle);
+
+    public ResponseEntity<?>  viewAllShuttle();
 
 	// public Shuttle updateShuttle(Shuttle newShuttle);
 

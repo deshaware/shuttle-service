@@ -1,6 +1,7 @@
 package com.deshaware.shuttleservice.service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @Transactional
@@ -38,9 +40,25 @@ public class ShuttleServiceImpl implements ShuttleService {
             newShuttle.setEnabled(true);
             newShuttle.setModified(Instant.now());
             shuttleRepo.save(newShuttle);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>("Shuttle Added Succesfully", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Some error", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Some error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> viewAllShuttle() {
+        try {
+            List<Shuttle> shuttleList = shuttleRepo.findAll();
+            if (shuttleList.isEmpty()) {
+                return new ResponseEntity<>("No Shuttles Found", HttpStatus.NOT_FOUND);
+            }
+            System.out.println(shuttleList);
+            // return shuttleList;
+            return new ResponseEntity<>(shuttleList, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            // return new ResponseEntity<>("Some error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Some error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
     }
