@@ -4,6 +4,7 @@ import com.deshaware.shuttleservice.repo.UserRepo;
 
 import java.time.Instant;
 // import java.util.UUID;
+import java.util.Optional;
 
 import com.deshaware.shuttleservice.dto.RegisterRequest;
 
@@ -24,13 +25,19 @@ public class AuthService {
     private UserRepo userRepo;
     
     public void signup(RegisterRequest regRequest) {
-        User user = new User();
-        user.setEmail(regRequest.getEmail());
-        user.setName(regRequest.getName());
-        user.setRole(regRequest.getRole());
-        user.setPassword(passwordEncoder.encode(regRequest.getPassword()));
-        user.setModified(Instant.now());
-        user.setEnabled(true);
-        userRepo.save(user);
+        Optional<User> check = userRepo.findByEmail(regRequest.getEmail());
+        if (check.isPresent()) {
+            throw new Error("User already exist with email:" + regRequest.getEmail());
+        } else {
+            User user = new User();
+            user.setEmail(regRequest.getEmail());
+            user.setName(regRequest.getName());
+            user.setRole(regRequest.getRole());
+            user.setPassword(passwordEncoder.encode(regRequest.getPassword()));
+            user.setModified(Instant.now());
+            user.setEnabled(true);
+            userRepo.save(user);
+        }
+        
     }
 }
