@@ -2,19 +2,47 @@ package com.deshaware.shuttleservice.model;
 
 import java.time.Instant;
 
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Shuttle {
+
+    /**
+     * A plate number or a vehicle registration number would suffice this requirement
+     * 
+     */
     @Id
-    private int shuttle_id;
+    private String shuttle_id;  
 
-    @Enumerated(EnumType.STRING)
-    private String suttle_type;
+    /**
+     * Shuttle types are enum so that in future any type of vehcile 
+     * can be added
+     */
+    @Enumerated(EnumType.ORDINAL)
+    private Vehicle suttle_type;
 
+    // Shuttle Description
+    /**
+     * Optional field contains descriptory informatio
+     */
+    private String shuttle_desc;
+
+    /**
+     * Important as it decided capactiy
+     */
+    @Min(value = 1, message = "The value must be positive")
     private int capacity;
-
     private Instant modified;
     private boolean enabled;
 
