@@ -33,9 +33,4 @@ public class AuthService {
         user.setEnabled(true);
         userRepo.save(user);
     }
-
-    // private void generateVerificationToke(User user) {
-    //     String verificationToken = UUID.randomUUID().toString();
-        
-    // }
 }
