@@ -13,6 +13,8 @@ public interface ShuttleService {
 
     public ResponseEntity<?>  viewAllShuttle();
 
+    public ResponseEntity<?> deleteShuttle(String shuttle_id);
+
 	// public Shuttle updateShuttle(Shuttle newShuttle);
 
 	// public Iterable<Shuttle> getAllShuttle();

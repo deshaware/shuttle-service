@@ -34,7 +34,7 @@ public class ShuttleServiceImpl implements ShuttleService {
             }
             Shuttle newShuttle = new Shuttle();
             newShuttle.setCapacity(shuttle.getCapacity());
-            newShuttle.setShuttle_id(shuttle.getShuttle_id());
+            newShuttle.setShuttle_id(shuttle.getShuttle_id().toLowerCase());
             newShuttle.setShuttle_desc(shuttle.getShuttle_desc());
             newShuttle.setSuttle_type(shuttle.getShuttle_type());
             newShuttle.setEnabled(true);
@@ -48,19 +48,24 @@ public class ShuttleServiceImpl implements ShuttleService {
 
     @Override
     public ResponseEntity<?> viewAllShuttle() {
-        try {
-            List<Shuttle> shuttleList = shuttleRepo.findAll();
-            if (shuttleList.isEmpty()) {
-                return new ResponseEntity<>("No Shuttles Found", HttpStatus.NOT_FOUND);
-            }
-            System.out.println(shuttleList);
-            // return shuttleList;
-            return new ResponseEntity<>(shuttleList, HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            // return new ResponseEntity<>("Some error", HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<>("Some error", HttpStatus.INTERNAL_SERVER_ERROR);
+        List<Shuttle> shuttleList = shuttleRepo.findAll();
+        if (shuttleList.isEmpty()) {
+            return new ResponseEntity<>("No Shuttles Found", HttpStatus.NOT_FOUND);
         }
+        System.out.println(shuttleList);
+        // return shuttleList;
+        return new ResponseEntity<>(shuttleList, HttpStatus.ACCEPTED);
         
+    }
+
+    @Override
+    public ResponseEntity<?> deleteShuttle(String shuttle_id) {
+        Optional<Shuttle> getShuttle = shuttleRepo.findById(shuttle_id);
+        if (!getShuttle.isPresent()) {
+            throw new Error("No Shuttle Found with id" + shuttle_id);
+        }
+        shuttleRepo.deleteById(shuttle_id);
+        return new ResponseEntity<>("Shuttle Deleted Succesfully",HttpStatus.ACCEPTED);
     }
 
 }
