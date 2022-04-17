@@ -16,9 +16,5 @@ public interface ShuttleService {
     public ResponseEntity<?> deleteShuttle(String shuttle_id);
 
 	// public Shuttle updateShuttle(Shuttle newShuttle);
-
-	// public Iterable<Shuttle> getAllShuttle();
-
-	// public ResponseEntity<?> findShuttleById(Long shuttle_id);
     
 }
