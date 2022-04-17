@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 import lombok.Data;
 
 @Data
-public class ResponseFailure implements Serializable{
-    private HttpStatus httpStatus;
-    private String status="FAILED";
+public class Response implements Serializable {
+    private String status ;
     private Instant processed_on;
     private Object reason;
+    private Object data;
 }

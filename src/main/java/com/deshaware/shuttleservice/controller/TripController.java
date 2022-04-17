@@ -6,6 +6,7 @@ import com.deshaware.shuttleservice.service.TripService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +25,10 @@ public class TripController {
     @PostMapping("/addTrip")
     public ResponseEntity<?> addTrip(@RequestBody TripRequest tripRequest){
         return tripService.addTrip(tripRequest);
+    }
+
+    @GetMapping("/viewAllTrip")
+    public ResponseEntity<?> viewAllTrip() {
+        return tripService.viewAllTrip();
     }
 }

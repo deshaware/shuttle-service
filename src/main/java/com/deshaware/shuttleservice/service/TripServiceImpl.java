@@ -10,6 +10,7 @@ import com.deshaware.shuttleservice.model.*;
 import com.deshaware.shuttleservice.repo.ShuttleRepo;
 import com.deshaware.shuttleservice.repo.TripRepo;
 import com.deshaware.shuttleservice.repo.UserRepo;
+import com.deshaware.shuttleservice.response.Response;
 import com.deshaware.shuttleservice.response.ResponseFailure;
 import com.deshaware.shuttleservice.response.ResponseSuccess;
 
@@ -32,6 +33,7 @@ public class TripServiceImpl implements TripService{
     UserRepo userRepo;
     @Autowired
     ShuttleRepo shuttleRepo;
+    
     @Override
     public ResponseEntity<?> addTrip(TripRequest tripRequest) {
         try {
@@ -74,5 +76,28 @@ public class TripServiceImpl implements TripService{
             }}, HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    @Override
+    public ResponseEntity<Response> viewAllTrip() {
+        try {
+            logger.info("Request: TripService Implementation" + "method: viewAllTrip");
+            List<Trip> trips = tripRepo.findAll();
+            return new ResponseEntity<Response>(new Response(){{
+                setData(trips);
+                setStatus("SUCCESS");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.warn("Request: TripService Implementation" + "method: viewAllTrip" + " error " + e.getLocalizedMessage());
+            return new ResponseEntity<Response>(new Response(){{
+                setReason("Error while creating a trip " + e.getLocalizedMessage());
+                setStatus("FAILED");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    
     
 }
