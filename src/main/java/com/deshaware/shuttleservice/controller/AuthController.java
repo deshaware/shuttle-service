@@ -1,6 +1,7 @@
 package com.deshaware.shuttleservice.controller;
 
 import com.deshaware.shuttleservice.dto.RegisterRequest;
+import com.deshaware.shuttleservice.response.Response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,34 +9,36 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 
-import com.deshaware.shuttleservice.service.AuthService;
+import com.deshaware.shuttleservice.service.AuthServiceImpl;
 import static org.springframework.http.HttpStatus.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest register) { // transfered from DTO
-        try {
-            authService.signup(register);
-            return new ResponseEntity<>("User Registration Successful",
-                    OK);    
-        } catch (Exception e) {
-            return new ResponseEntity<String>("You've Failed" + e.getMessage(), HttpStatus.FORBIDDEN);
-        }
-        
+    public ResponseEntity<Response> signup(@RequestBody RegisterRequest register) { // transfered from DTO
+        return authService.signup(register); 
+    }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<Response> getAllUsers() { // transfered from DTO
+        return authService.getAllUsers(); 
     }
 
 
-    // @RequestMapping(value="/", method= RequestMethod.GET)
-    // @ResponseBody
-    // public String login() {
-    //     System.out.println("Called Login");
-    //     return "Hello World!";
-    // }
+    @GetMapping("/isUserActive/{email}")
+    public ResponseEntity<Response> isUserActive(@PathVariable("email") String email) { // transfered from DTO
+        return authService.isUserActive(email); 
+    }
+
+   @PostMapping("/deactiveUser/{email}")
+   public ResponseEntity<Response> deactiveUser(@PathVariable("email") String email) { // transfered from DTO
+        return authService.deactiveUser(email);
+   }
+
 
 
 }

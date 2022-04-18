@@ -50,9 +50,9 @@ public class TripServiceImpl implements TripService{
             List<Trip> trip = tripRepo.findDuplicateTrip(tripRequest.getShuttle_id(), tripRequest.getScheduled_on());
             if (!trip.isEmpty()) {
                 return new ResponseEntity<Response>(new Response(){{
-                    setReason("The trip already exist with shuttle " + tripRequest.getShuttle_id() + " and scheduled on " + tripRequest.getScheduled_on());
+                    setMessage("The trip already exist with shuttle " + tripRequest.getShuttle_id() + " and scheduled on " + tripRequest.getScheduled_on());
                     setStatus("FAILED");
-                    setProcessed_on(Instant.now());
+
                 }}, HttpStatus.BAD_REQUEST);
             }
 
@@ -69,13 +69,11 @@ public class TripServiceImpl implements TripService{
             return new ResponseEntity<Response>(new Response(){{
                 setData(new_trip);
                 setStatus("SUCCESS");
-                setProcessed_on(Instant.now());
             }} ,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<Response>(new Response(){{
-                setReason("Error while creating a trip " + e.getLocalizedMessage());
+                setMessage("Error while creating a trip " + e.getLocalizedMessage());
                 setStatus("FAILED");
-                setProcessed_on(Instant.now());
             }}, HttpStatus.BAD_REQUEST);
         }
     }
@@ -89,14 +87,12 @@ public class TripServiceImpl implements TripService{
             return new ResponseEntity<Response>(new Response(){{
                 setData(trips);
                 setStatus("SUCCESS");
-                setProcessed_on(Instant.now());
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.warn("Request: TripService Implementation" + "method: viewAllTrip" + " error " + e.getLocalizedMessage());
             return new ResponseEntity<Response>(new Response(){{
-                setReason("Error while creating a trip " + e.getLocalizedMessage());
+                setMessage("Error while creating a trip " + e.getLocalizedMessage());
                 setStatus("FAILED");
-                setProcessed_on(Instant.now());
             }}, HttpStatus.BAD_REQUEST);
         }
     }
@@ -149,14 +145,12 @@ public class TripServiceImpl implements TripService{
             return new ResponseEntity<Response>(new Response(){{
                 setStatus("SUCCESS");
                 setData(trip);
-                setReason("Trip Modified");
-                setProcessed_on(Instant.now());
+                setMessage("Trip Modified");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<Response>(new Response(){{
-                setReason("Error while modifying a trip " + e.getLocalizedMessage());
+                setMessage("Error while modifying a trip " + e.getLocalizedMessage());
                 setStatus("FAILED");
-                setProcessed_on(Instant.now());
             }}, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -168,23 +162,21 @@ public class TripServiceImpl implements TripService{
             Optional<Trip> trips = tripRepo.findById(trip_id);
             if (trips.isEmpty()) {
                 return new ResponseEntity<Response>(new Response(){{
-                    setReason("No trip found with trip_id: " + trip_id);
+                    setMessage("No trip found with trip_id: " + trip_id);
                     setStatus("FAILED");
-                    setProcessed_on(Instant.now());
+
                 }}, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             tripRepo.deleteById(trip_id);
             return new ResponseEntity<Response>(new Response(){{
                 setStatus("SUCCESS");
-                setProcessed_on(Instant.now());
                 setData("Trip "+ trip_id + " is deleted successully");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.error("Unable to delete trip");
             return new ResponseEntity<Response>(new Response(){{
-                setReason("Error while deleting a trip: " + e.getLocalizedMessage());
+                setMessage("Error while deleting a trip: " + e.getLocalizedMessage());
                 setStatus("FAILED");
-                setProcessed_on(Instant.now());
             }}, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -243,15 +235,13 @@ public class TripServiceImpl implements TripService{
             return new ResponseEntity<Response>(new Response(){{
                 setStatus("SUCCESS");
                 setData(freshTripDetail);
-                setReason("Trip Modified");
-                setProcessed_on(Instant.now());
+                setMessage("Trip Modified");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.catching(e);
             return new ResponseEntity<Response>(new Response(){{
-                setReason("Error while enrolling user to a trip " + e.getMessage());
+                setMessage("Error while enrolling user to a trip " + e.getMessage());
                 setStatus("FAILED");
-                setProcessed_on(Instant.now());
             }}, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
