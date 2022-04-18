@@ -35,43 +35,45 @@ public class TripServiceImpl implements TripService{
     ShuttleRepo shuttleRepo;
     
     @Override
-    public ResponseEntity<?> addTrip(TripRequest tripRequest) {
+    public ResponseEntity<Response> addTrip(TripRequest tripRequest) {
         try {
-            Optional<User> driver = userRepo.findByEmail(tripRequest.getDriver_id().toLowerCase());
-            if (driver.equals(null)) {
-                return new ResponseEntity<>("Driver does not exist", HttpStatus.BAD_REQUEST);
+            User driver = userRepo.findDriverByEmail(tripRequest.getDriver_id().toLowerCase());
+            if (driver == null) {
+                throw new Error("Driver does not exist");
             }
             Optional<Shuttle> shuttle = shuttleRepo.findById(tripRequest.getShuttle_id().toLowerCase());
             if (shuttle.isEmpty()) {
-                return new ResponseEntity<>("Shuttle does not exist", HttpStatus.BAD_REQUEST);
+                throw new Error("Shuttle does not exist");
             }
             // logic to prevent duplicate trips
             List<Trip> trip = tripRepo.findDuplicateTrip(tripRequest.getShuttle_id(), tripRequest.getScheduled_on());
             if (!trip.isEmpty()) {
-                return new ResponseEntity<ResponseFailure>(new ResponseFailure(){{
+                return new ResponseEntity<Response>(new Response(){{
                     setReason("The trip already exist with shuttle " + tripRequest.getShuttle_id() + " and scheduled on " + tripRequest.getScheduled_on());
-                    setHttpStatus(HttpStatus.BAD_REQUEST);
+                    setStatus("FAILED");
                     setProcessed_on(Instant.now());
                 }}, HttpStatus.BAD_REQUEST);
             }
 
             Trip new_trip = new Trip();
-            new_trip.setDriver_id(driver.get()); // different
+            new_trip.setDriver_id(driver); // different
             new_trip.setShuttle_id(shuttle.get()); // different way
             new_trip.setScheduled_on(tripRequest.getScheduled_on());
+            new_trip.setStart_lang(tripRequest.getStart_lang());
+            new_trip.setStart_lat(tripRequest.getStart_lat());
             new_trip.setModified(Instant.now());
             new_trip.setTrip_status(TripStatus.INTIATED);
             tripRepo.save(new_trip);
             logger.info("Trip Created");
-            return new ResponseEntity<ResponseSuccess>(new ResponseSuccess(){{
+            return new ResponseEntity<Response>(new Response(){{
                 setData(new_trip);
-                setHttpStatus(HttpStatus.CREATED);
+                setStatus("SUCCESS");
                 setProcessed_on(Instant.now());
             }} ,HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<ResponseFailure>(new ResponseFailure(){{
+            return new ResponseEntity<Response>(new Response(){{
                 setReason("Error while creating a trip " + e.getLocalizedMessage());
-                setHttpStatus(HttpStatus.BAD_REQUEST);
+                setStatus("FAILED");
                 setProcessed_on(Instant.now());
             }}, HttpStatus.BAD_REQUEST);
         }
@@ -98,6 +100,96 @@ public class TripServiceImpl implements TripService{
         }
     }
     
+    @Override
+    public ResponseEntity<Response> modifyTrip(TripRequest tripRequest, long trip_id){
+        try {
+            // validate trip data
+            Trip trip = tripRepo.findTripById(trip_id);
+            if (trip == null) {
+                throw new Error("No trip found with trip_id: " + tripRequest.getTrip_id());
+            }
+
+            // if driver is updated
+            if (!tripRequest.getDriver_id().isEmpty()) {
+                // get new driver
+                User driver = userRepo.findDriverByEmail(tripRequest.getDriver_id().toLowerCase());
+                // Optional<User> driver = userRepo.findByEmail(tripRequest.getDriver_id().toLowerCase());
+                if (driver == null) {
+                    throw new Error("Invalid Driver, Trip Cannot update!");
+                }
+                trip.setDriver_id(driver);
+            }
+
+            // shuttle
+            if (!tripRequest.getShuttle_id().isEmpty()) {
+                Optional<Shuttle> shuttle = shuttleRepo.findById(tripRequest.getShuttle_id().toLowerCase());
+                if (!shuttle.isPresent()) {
+                    throw new Error("Invalid Shuttle, Trip Cannot update!");
+                }
+                trip.setShuttle_id(shuttle.get());
+            }
+
+            if (tripRequest.getScheduled_on() != null) {
+                trip.setScheduled_on(tripRequest.getScheduled_on());
+            }
+
+            // or write another API for changing the status
+            if(tripRequest.getTrip_status() != null){
+                trip.setTrip_status(tripRequest.getTrip_status());
+            }
+
+            if (tripRequest.getStart_lang() != trip.getStart_lang() || tripRequest.getStart_lang() != trip.getStart_lat() ) {
+                trip.setStart_lang(tripRequest.getStart_lang());
+                trip.setStart_lat(tripRequest.getStart_lat());
+            }
+
+            if (tripRequest.getScheduled_on() != null && tripRequest.getScheduled_on() instanceof Instant) {
+                trip.setScheduled_on(tripRequest.getScheduled_on());    
+            }
+            
+            trip.setModified(Instant.now());
+            tripRepo.save(trip);
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setData(trip);
+                setReason("Trip Modified");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<Response>(new Response(){{
+                setReason("Error while modifying a trip " + e.getLocalizedMessage());
+                setStatus("FAILED");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
+    @Override
+    public ResponseEntity<Response> deleteTrip(long trip_id){
+        try {
+            // validate trip data
+            Optional<Trip> trips = tripRepo.findById(trip_id);
+            if (trips.isEmpty()) {
+                return new ResponseEntity<Response>(new Response(){{
+                    setReason("No trip found with trip_id: " + trip_id);
+                    setStatus("FAILED");
+                    setProcessed_on(Instant.now());
+                }}, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            tripRepo.deleteById(trip_id);
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setProcessed_on(Instant.now());
+                setData("Trip "+ trip_id + " is deleted successully");
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("Unable to delete trip");
+            return new ResponseEntity<Response>(new Response(){{
+                setReason("Error while deleting a trip: " + e.getLocalizedMessage());
+                setStatus("FAILED");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 }

@@ -13,12 +13,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TripRepo extends JpaRepository<Trip, String>{
+public interface TripRepo extends JpaRepository<Trip, Long>{
 
     @Query(value = "SELECT * FROM Trip WHERE shuttle_id = :shuttle_id AND scheduled_on = :scheduled_on AND trip_status <> 'CANCELED'", nativeQuery = true)
     List<Trip> findDuplicateTrip(
         @Param("shuttle_id") String shuttle_id, 
         @Param("scheduled_on") Instant scheduled_on
+    );
+
+    @Query(value = "SELECT * FROM Trip WHERE trip_id = :trip_id", nativeQuery=true)
+    Trip findTripById(
+        @Param("trip_id") long trip_id
     );
     
 }

@@ -26,6 +26,8 @@ public class Trip {
     private long trip_id;
     
     private Instant scheduled_on;
+    private double start_lang;
+    private double start_lat;
 
     @Enumerated(EnumType.STRING)
     private TripStatus trip_status;
