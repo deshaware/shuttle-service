@@ -8,11 +8,10 @@ import javax.transaction.Transactional;
 import com.deshaware.shuttleservice.dto.TripRequest;
 import com.deshaware.shuttleservice.model.*;
 import com.deshaware.shuttleservice.repo.ShuttleRepo;
+import com.deshaware.shuttleservice.repo.TripDetailRepo;
 import com.deshaware.shuttleservice.repo.TripRepo;
 import com.deshaware.shuttleservice.repo.UserRepo;
 import com.deshaware.shuttleservice.response.Response;
-import com.deshaware.shuttleservice.response.ResponseFailure;
-import com.deshaware.shuttleservice.response.ResponseSuccess;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +32,8 @@ public class TripServiceImpl implements TripService{
     UserRepo userRepo;
     @Autowired
     ShuttleRepo shuttleRepo;
+    @Autowired
+    TripDetailRepo tripDetailRepo;
     
     @Override
     public ResponseEntity<Response> addTrip(TripRequest tripRequest) {
@@ -106,11 +107,11 @@ public class TripServiceImpl implements TripService{
             // validate trip data
             Trip trip = tripRepo.findTripById(trip_id);
             if (trip == null) {
-                throw new Error("No trip found with trip_id: " + tripRequest.getTrip_id());
+                throw new Error("No trip found with trip_id: " + trip_id);
             }
 
             // if driver is updated
-            if (!tripRequest.getDriver_id().isEmpty()) {
+            if (tripRequest.getDriver_id() != null) {
                 // get new driver
                 User driver = userRepo.findDriverByEmail(tripRequest.getDriver_id().toLowerCase());
                 // Optional<User> driver = userRepo.findByEmail(tripRequest.getDriver_id().toLowerCase());
@@ -121,16 +122,12 @@ public class TripServiceImpl implements TripService{
             }
 
             // shuttle
-            if (!tripRequest.getShuttle_id().isEmpty()) {
+            if (tripRequest.getShuttle_id() != null) {
                 Optional<Shuttle> shuttle = shuttleRepo.findById(tripRequest.getShuttle_id().toLowerCase());
                 if (!shuttle.isPresent()) {
                     throw new Error("Invalid Shuttle, Trip Cannot update!");
                 }
                 trip.setShuttle_id(shuttle.get());
-            }
-
-            if (tripRequest.getScheduled_on() != null) {
-                trip.setScheduled_on(tripRequest.getScheduled_on());
             }
 
             // or write another API for changing the status
@@ -192,4 +189,70 @@ public class TripServiceImpl implements TripService{
         }
     }
     
+
+    @Override
+    public ResponseEntity<Response> enrollTrip(long trip_id, String email, TripDetail tripDetail){
+        try {
+            // validate trip data
+            Trip trip = tripRepo.findActiveTripById(trip_id);
+            if (trip == null) {
+                throw new Error("No active trip found with trip_id: " + trip_id);
+            }
+
+            User user = userRepo.findActiveUser(email);
+            if (user == null || !user.isEnabled() || user.getRole() != Role.USER) {
+                throw new Error("Unable to enroll user : " + email);
+            }
+
+            // check trip user
+            TripDetail checkTripDetail = tripDetailRepo.findByExistingUser(trip_id, email);
+
+            // check if user exist in the set
+            if (checkTripDetail != null && trip.getTrip_users().contains(checkTripDetail.getTrip_detail_id())) {
+                throw new Error("User: " + email +" has already registered for the trip : " + trip_id);
+            }
+
+            // check if capacity allows
+            if (!trip.canEnroll()) {
+                throw new Error("Shuttle is full" + trip_id);
+            }
+
+            // check all exist
+            if (tripDetail.getEnd_lat() == 0 || tripDetail.getEnd_long() == 0
+            || tripDetail.getStart_long() == 0 || tripDetail.getStart_lat() == 0
+            ){
+                throw new Error("Problems with Start and End coordinates ");
+            }
+
+            TripDetail newTripDetail = new TripDetail();
+            newTripDetail.setEnd_lat( tripDetail.getEnd_lat());
+            newTripDetail.setEnd_long( tripDetail.getEnd_long());
+            newTripDetail.setStart_long( tripDetail.getStart_long());
+            newTripDetail.setStart_lat( tripDetail.getStart_lat());
+            newTripDetail.setUser(user);
+            newTripDetail.setTrip(trip);
+
+            newTripDetail.setModified(Instant.now());
+            newTripDetail.setStatus(UserTripStatus.REGISTERED);
+            TripDetail freshTripDetail = tripDetailRepo.save(newTripDetail);
+            System.out.println("fresh" + freshTripDetail);
+            trip.enrollUser(freshTripDetail.getTrip_detail_id());
+            // trip.enrollUser(freshTripDetail);
+            tripRepo.save(trip);
+
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setData(freshTripDetail);
+                setReason("Trip Modified");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.catching(e);
+            return new ResponseEntity<Response>(new Response(){{
+                setReason("Error while enrolling user to a trip " + e.getMessage());
+                setStatus("FAILED");
+                setProcessed_on(Instant.now());
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

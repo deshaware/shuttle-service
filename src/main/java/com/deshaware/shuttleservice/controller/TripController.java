@@ -2,6 +2,7 @@ package com.deshaware.shuttleservice.controller;
 
 import com.deshaware.shuttleservice.dto.TripRequest;
 import com.deshaware.shuttleservice.model.Trip;
+import com.deshaware.shuttleservice.model.TripDetail;
 import com.deshaware.shuttleservice.response.Response;
 import com.deshaware.shuttleservice.service.TripService;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -48,4 +50,37 @@ public class TripController {
     ) {
         return tripService.modifyTrip(tripRequest, trip_id);
     }
+
+    @PutMapping("/enrollTrip")
+    public ResponseEntity<Response> entrollTrip(
+        @RequestParam long trip_id, String email,
+        @RequestBody TripDetail tripDetail
+    ) {
+        return tripService.enrollTrip(trip_id, email, tripDetail);
+    }
+    
+    // @PutMapping("/{trip_id}/unenrollTrip/{email}")
+    // public ResponseEntity<Response> unentrollTrip(
+    //     @PathVariable long trip_id, String email
+    // ) {
+    //     return tripService.unenrollTrip(trip_id, email);
+    // }
+
+    // @PutMapping("/startTrip/{trip_id}")
+    // public ResponseEntity<Response> modifyTrip(
+    //     @PathVariable long trip_id
+    // ) {
+    //     // once started, cannot modify the trip
+    //     return tripService.startTrip(trip_id);
+    // }
+
+    // @PutMapping("/endTrip/{trip_id}")
+    // public ResponseEntity<Response> endTrip(
+    //     @PathVariable long trip_id
+    // ) {
+    //     // once started, cannot modify the trip
+    //     return tripService.endTrip(trip_id);
+    // }
+
+
 }

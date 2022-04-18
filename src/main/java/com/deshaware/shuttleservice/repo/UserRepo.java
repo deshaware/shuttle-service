@@ -19,5 +19,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
         @Param("email") String email
         );
 
-    // User findByUser(String email); // for trip
+    @Query(value = "SELECT * FROM User WHERE Role = 'USER' AND enabled=1 AND email = :email", nativeQuery=true)
+    User findActiveUser(
+        @Param("email") String email
+        );
 }

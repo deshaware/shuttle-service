@@ -25,5 +25,10 @@ public interface TripRepo extends JpaRepository<Trip, Long>{
     Trip findTripById(
         @Param("trip_id") long trip_id
     );
+
+    @Query(value = "SELECT * FROM Trip WHERE trip_id = :trip_id AND trip_status = 'INTIATED'", nativeQuery=true)
+    Trip findActiveTripById(
+        @Param("trip_id") long trip_id
+    );
     
 }

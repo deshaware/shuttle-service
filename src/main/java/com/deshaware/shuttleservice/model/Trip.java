@@ -1,6 +1,7 @@
 package com.deshaware.shuttleservice.model;
 
 import java.time.Instant;
+import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +43,22 @@ public class Trip {
     @JoinColumn(name="shuttle_id")
     private Shuttle shuttle_id;
 
+    // will be limited to the capacity
+    private HashSet<Long> trip_users = new HashSet<Long>();
+
     private Instant modified;
+
+    public void enrollUser(Long trip_user){
+        this.trip_users.add(trip_user);
+    }
+
+    public void unenrollUser(Long user){
+        this.trip_users.remove(user);
+    }
+
+    public boolean canEnroll(){
+        return this.trip_users.size() <= this.shuttle_id.getCapacity();
+    }
+    
 
 }
