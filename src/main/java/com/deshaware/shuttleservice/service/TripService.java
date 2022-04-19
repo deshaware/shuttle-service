@@ -16,14 +16,6 @@ public interface TripService {
 
     public ResponseEntity<Response> deleteTrip(long trip_id);
 
-    public ResponseEntity<Response> enrollTrip(long trip_id, String email, TripDetail tripDetail);
-
-    // public ResponseEntity<Response> unenrollTrip(long trip_id, String email);
-
-    // public ResponseEntity<Response> startTrip(long trip_id);
-
-    // public ResponseEntity<Response> endTrip(long trip_id);
-
-    // public void createTrip(Trip trip);
+    public ResponseEntity<?> viewTrip(long trip_id);
 
 }

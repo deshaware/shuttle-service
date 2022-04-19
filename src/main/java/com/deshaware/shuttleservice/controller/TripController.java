@@ -38,6 +38,11 @@ public class TripController {
         return tripService.viewAllTrip();
     }
 
+    @GetMapping("/viewTrip/{trip_id}")
+    public ResponseEntity<?> viewTrip(@PathVariable long trip_id) {
+        return tripService.viewTrip(trip_id);
+    }
+
     @DeleteMapping("/delete/{trip_id}")
     public ResponseEntity<Response> deleteTrip(@PathVariable long trip_id){
         return tripService.deleteTrip(trip_id);
@@ -51,36 +56,7 @@ public class TripController {
         return tripService.modifyTrip(tripRequest, trip_id);
     }
 
-    @PutMapping("/enrollTrip")
-    public ResponseEntity<Response> entrollTrip(
-        @RequestParam long trip_id, String email,
-        @RequestBody TripDetail tripDetail
-    ) {
-        return tripService.enrollTrip(trip_id, email, tripDetail);
-    }
-    
-    // @PutMapping("/{trip_id}/unenrollTrip/{email}")
-    // public ResponseEntity<Response> unentrollTrip(
-    //     @PathVariable long trip_id, String email
-    // ) {
-    //     return tripService.unenrollTrip(trip_id, email);
-    // }
-
-    // @PutMapping("/startTrip/{trip_id}")
-    // public ResponseEntity<Response> modifyTrip(
-    //     @PathVariable long trip_id
-    // ) {
-    //     // once started, cannot modify the trip
-    //     return tripService.startTrip(trip_id);
-    // }
-
-    // @PutMapping("/endTrip/{trip_id}")
-    // public ResponseEntity<Response> endTrip(
-    //     @PathVariable long trip_id
-    // ) {
-    //     // once started, cannot modify the trip
-    //     return tripService.endTrip(trip_id);
-    // }
+   
 
 
 }
