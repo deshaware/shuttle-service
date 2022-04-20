@@ -10,10 +10,16 @@ public interface TripDetailService {
 
     public ResponseEntity<Response> unenrollTrip(long trip_id, String email);
 
-    // public ResponseEntity<Response> startTrip(long trip_id);
+    // public ResponseEntity<Response> getTripHistoryByUser(String email);
 
-    // public ResponseEntity<Response> endTrip(long trip_id);
+    // public ResponseEntity<Response> getAllTripDetails(long trip_id); // accessible to admins
 
-    // public void createTrip(Trip trip);
+    // public ResponseEntity<Response> getTripDetail(long trip_id);
+
+    // public ResponseEntity<Response> startTrip(long trip_id); // accessible to drivers
+
+    // public ResponseEntity<Response> endTrip(long trip_id); // accessible to drivers
+
+    // public ResponseEntity<Response> dropOff(long trip_id, long trip_detail_id); // accessible to drivers
     
 }
