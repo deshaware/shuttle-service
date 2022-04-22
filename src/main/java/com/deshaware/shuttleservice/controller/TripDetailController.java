@@ -44,13 +44,13 @@ public class TripDetailController {
         return tripDetailService.unenrollTrip(trip_id, email);
     }
 
-    // @PutMapping("/startTrip/{trip_id}")
-    // public ResponseEntity<Response> modifyTrip(
-    //     @PathVariable long trip_id
-    // ) {
-    //     // once started, cannot modify the trip
-    //     return tripDetailService.startTrip(trip_id);
-    // }
+    @PostMapping("/startTrip/{trip_id}")
+    public ResponseEntity<Response> startTrip(
+        @PathVariable long trip_id
+    ) {
+        // once started, cannot modify the trip
+        return tripDetailService.startTrip(trip_id);
+    }
 
     // @PutMapping("/endTrip/{trip_id}")
     // public ResponseEntity<Response> endTrip(

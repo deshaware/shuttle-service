@@ -1,7 +1,9 @@
 package com.deshaware.shuttleservice.service;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.ObjDoubleConsumer;
 
 import javax.transaction.Transactional;
 
@@ -78,7 +80,7 @@ public class TripDetailServiceImpl implements TripDetailService{
             newTripDetail.setTrip(trip);
 
             newTripDetail.setModified(Instant.now());
-            newTripDetail.setStatus(UserTripStatus.REGISTERED);
+            newTripDetail.setStatus(TripDetailStatus.REGISTERED);
             TripDetail freshTripDetail = tripDetailRepo.save(newTripDetail);
             System.out.println("fresh" + freshTripDetail);
             trip.enrollUser(freshTripDetail.getTrip_detail_id());
@@ -130,7 +132,7 @@ public class TripDetailServiceImpl implements TripDetailService{
             trip.getTrip_users().remove(checkTripDetail.getTrip_detail_id());
 
             // change TripDetail status to cancel
-            checkTripDetail.setStatus(UserTripStatus.CANCELED);
+            checkTripDetail.setStatus(TripDetailStatus.CANCELED);
 
             tripRepo.save(trip);
             tripDetailRepo.save(checkTripDetail);
@@ -149,5 +151,49 @@ public class TripDetailServiceImpl implements TripDetailService{
         }
     }
 
+
+    @Override
+    public ResponseEntity<Response> startTrip(long trip_id) {// accessible to drivers
+        try {
+            /**
+             * flow
+             * 1. check trip id
+             * 2. get all the trip_details_id
+             * 3. call distance api and create a list
+             * 4. before returning
+             */
+            Trip trip = tripRepo.findActiveTripById(trip_id);
+            if (trip == null) {
+                throw new Error("No active trip found with trip_id: " + trip_id);
+            }
+
+            // no need, we can just take users from the trip and start them off
+            // as we are updating the trip
+            HashSet<Long> trip_users = trip.getTrip_users();
+            System.out.println(trip_users);
+
+            tripDetailRepo.setStatusForTripDetails(trip_users, TripDetailStatus.ON_THE_WAY.toString());
+            
+            // start trip
+            trip.setTrip_status(TripStatus.IN_PROGRESS);
+
+            // get distance api and return
+            tripRepo.save(trip);
+
+
+
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setData("");
+                setMessage("Trip Started Successfully");
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.catching(e);
+            return new ResponseEntity<Response>(new Response(){{
+                setMessage("Error while starting a trip " + e.getMessage());
+                setStatus("FAILED");
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 }

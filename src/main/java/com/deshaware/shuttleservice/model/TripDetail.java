@@ -6,6 +6,8 @@ import java.util.HashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -48,7 +50,9 @@ public class TripDetail implements Serializable {
     private Instant est_pickup;
     private int waitlist;
     
-    private UserTripStatus status;
+    @Enumerated(EnumType.STRING)
+    private TripDetailStatus status;
+    
     private Instant modified;
 
 }
