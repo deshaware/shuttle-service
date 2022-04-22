@@ -195,6 +195,61 @@ public class TripDetailServiceImpl implements TripDetailService{
             }}, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+
+    public ResponseEntity<Response> endTrip(long trip_id){
+        try {
+            logger.info("endTrip trip: " + trip_id);
+            Trip trip = tripRepo.findTripByStatusAndId(trip_id, TripStatus.IN_PROGRESS.toString());
+            if (trip == null) {
+                throw new Error("No active trip found with trip_id: " + trip_id);
+            }
+
+            // no need, we can just take users from the trip and start them off
+            // as we are updating the trip
+            HashSet<Long> trip_users = trip.getTrip_users();
+            System.out.println(trip_users);
+
+            tripDetailRepo.setStatusForTripDetails(trip_users, TripDetailStatus.COMPLETED.toString());
+            
+            // start trip
+            trip.setTrip_status(TripStatus.COMPLETED);
+
+            // get distance api and return
+            tripRepo.save(trip);
+
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setData(trip);
+                setMessage("Trip Ended Successfully");
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("Error while ending the trip" + e.getMessage());
+            return new ResponseEntity<Response>(new Response(){{
+                setMessage("Error while ending a trip " + e.getMessage());
+                setStatus("FAILED");
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    } 
+
+
+    public ResponseEntity<Response> viewAllTripDetails(){
+        try {
+            logger.info("View all trips");
+            List<TripDetail> tripDetails = tripDetailRepo.findAll();
+        
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setData(tripDetails);
+                setMessage("Trip Details Fetched Successfully");
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("Error while fetching all trip details " + e.getMessage());
+            return new ResponseEntity<Response>(new Response(){{
+                setMessage("Error while ending a trip " + e.getMessage());
+                setStatus("FAILED");
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 }

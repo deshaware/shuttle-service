@@ -52,12 +52,18 @@ public class TripDetailController {
         return tripDetailService.startTrip(trip_id);
     }
 
-    // @PutMapping("/endTrip/{trip_id}")
-    // public ResponseEntity<Response> endTrip(
-    //     @PathVariable long trip_id
-    // ) {
-    //     // once started, cannot modify the trip
-    //     return tripDetailService.endTrip(trip_id);
-    // }
+    @PostMapping("/endTrip/{trip_id}")
+    public ResponseEntity<Response> endTrip(
+        @PathVariable long trip_id
+    ) {
+        // once started, cannot modify the trip
+        return tripDetailService.endTrip(trip_id);
+    }
+
+    @GetMapping("/viewAllTripDetails")
+    public ResponseEntity<Response> viewAllTripDetails(
+    ) {
+        return tripDetailService.viewAllTripDetails();
+    }
     
 }

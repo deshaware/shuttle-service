@@ -6,6 +6,7 @@ import java.util.List;
 // import java.util.Optional;
 
 import com.deshaware.shuttleservice.model.Trip;
+import com.deshaware.shuttleservice.model.TripStatus;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,5 +31,10 @@ public interface TripRepo extends JpaRepository<Trip, Long>{
     Trip findActiveTripById(
         @Param("trip_id") long trip_id
     );
+
+    @Query(value = "SELECT * FROM Trip t WHERE trip_id = :trip_id AND trip_status = :status", nativeQuery=true)
+    Trip findTripByStatusAndId(
+        @Param("trip_id")long trip_id, 
+        @Param("status") String status);
     
 }

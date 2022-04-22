@@ -18,7 +18,9 @@ public interface TripDetailService {
 
     public ResponseEntity<Response> startTrip(long trip_id); // accessible to drivers
 
-    // public ResponseEntity<Response> endTrip(long trip_id); // accessible to drivers
+    public ResponseEntity<Response> endTrip(long trip_id); // accessible to drivers
+
+    public ResponseEntity<Response> viewAllTripDetails(); // accessible to drivers
 
     // public ResponseEntity<Response> dropOff(long trip_id, long trip_detail_id); // accessible to drivers
     
