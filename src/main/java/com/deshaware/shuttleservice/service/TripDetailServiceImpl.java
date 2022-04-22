@@ -104,6 +104,7 @@ public class TripDetailServiceImpl implements TripDetailService{
     @Override
     public ResponseEntity<Response> unenrollTrip(long trip_id, String email){
         try{
+            logger.info("Unenroll the trip: " + trip_id + " by " + email);
             // validate trip data
             Trip trip = tripRepo.findActiveTripById(trip_id);
             if (trip == null) {
@@ -143,7 +144,7 @@ public class TripDetailServiceImpl implements TripDetailService{
                 setMessage("Trip Modified: User Unenrolled successfully");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
-            logger.catching(e);
+            logger.error("Error in unrolling the trip", e);
             return new ResponseEntity<Response>(new Response(){{
                 setMessage("Error while unenrolling user to a trip " + e.getMessage());
                 setStatus("FAILED");
@@ -152,16 +153,17 @@ public class TripDetailServiceImpl implements TripDetailService{
     }
 
 
+    /**
+     * flow
+     * 1. check trip id
+     * 2. get all the trip_details_id
+     * 3. call distance api and create a list
+     * 4. 
+     */
     @Override
     public ResponseEntity<Response> startTrip(long trip_id) {// accessible to drivers
         try {
-            /**
-             * flow
-             * 1. check trip id
-             * 2. get all the trip_details_id
-             * 3. call distance api and create a list
-             * 4. before returning
-             */
+            logger.info("Start trip: " + trip_id);
             Trip trip = tripRepo.findActiveTripById(trip_id);
             if (trip == null) {
                 throw new Error("No active trip found with trip_id: " + trip_id);
@@ -180,20 +182,19 @@ public class TripDetailServiceImpl implements TripDetailService{
             // get distance api and return
             tripRepo.save(trip);
 
-
-
             return new ResponseEntity<Response>(new Response(){{
                 setStatus("SUCCESS");
-                setData("");
+                setData(trip);
                 setMessage("Trip Started Successfully");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
-            logger.catching(e);
+            logger.error("Error while starting the trip" + e.getMessage());
             return new ResponseEntity<Response>(new Response(){{
                 setMessage("Error while starting a trip " + e.getMessage());
                 setStatus("FAILED");
             }}, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
     
 }
