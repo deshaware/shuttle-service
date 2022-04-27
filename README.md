@@ -49,3 +49,7 @@ We have 3 main actors in the system
 
 ### System: 
  - To send out notification 
+
+ ## Use Case Diagram
+
+![Use Case](src/main/resources/static/usecase.png)
