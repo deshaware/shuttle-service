@@ -2,7 +2,6 @@ package com.deshaware.shuttleservice.model;
 
 import java.time.Instant;
 import java.util.HashSet;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Null;
-
 import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;

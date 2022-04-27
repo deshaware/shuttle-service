@@ -4,8 +4,6 @@ import com.deshaware.shuttleservice.model.TripDetail;
 import com.deshaware.shuttleservice.response.Response;
 import com.deshaware.shuttleservice.service.NotificationServiceFacade;
 import com.deshaware.shuttleservice.service.TripDetailService;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
