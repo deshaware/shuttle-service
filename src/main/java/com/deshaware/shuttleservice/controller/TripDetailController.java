@@ -2,7 +2,10 @@ package com.deshaware.shuttleservice.controller;
 
 import com.deshaware.shuttleservice.model.TripDetail;
 import com.deshaware.shuttleservice.response.Response;
+import com.deshaware.shuttleservice.service.NotificationServiceFacade;
 import com.deshaware.shuttleservice.service.TripDetailService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,7 @@ import lombok.AllArgsConstructor;
 public class TripDetailController {
 
     private final TripDetailService tripDetailService;
+    private NotificationServiceFacade notificationService;
 
     @PutMapping("/enrollTrip")
     public ResponseEntity<Response> entrollTrip(
@@ -59,5 +63,20 @@ public class TripDetailController {
     ) {
         return tripDetailService.viewAllTripDetails();
     }
+
+    @GetMapping("/getTripDetail/{trip_detail_id}")
+    public ResponseEntity<Response> getTripDetail(
+        @PathVariable long trip_detail_id
+    ) {
+        return tripDetailService.getTripDetail(trip_detail_id);
+    }
     
+    @PostMapping("/push")
+    public ResponseEntity<?> pushLocation(
+        @RequestParam long trip_id,
+        @RequestParam double lat, double lon
+    ) {
+        return notificationService.pushLocation(trip_id, lat, lon);
+         
+    }
 }

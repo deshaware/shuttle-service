@@ -2,6 +2,7 @@ package com.deshaware.shuttleservice.service;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -234,12 +235,32 @@ public class TripDetailServiceImpl implements TripDetailService{
         }
     } 
 
-
+    @Override
     public ResponseEntity<Response> viewAllTripDetails(){
         try {
             logger.info("View all trips");
             List<TripDetail> tripDetails = tripDetailRepo.findAll();
         
+            return new ResponseEntity<Response>(new Response(){{
+                setStatus("SUCCESS");
+                setData(tripDetails);
+                setMessage("Trip Details Fetched Successfully");
+            }}, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            logger.error("Error while fetching all trip details " + e.getMessage());
+            return new ResponseEntity<Response>(new Response(){{
+                setMessage("Error while ending a trip " + e.getMessage());
+                setStatus("FAILED");
+            }}, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @Override
+    public ResponseEntity<Response> getTripDetail(long trip_detail_id){
+        try {
+            logger.info("View all trips");
+            Optional<TripDetail> tripDetails = tripDetailRepo.findById(trip_detail_id);
+    
             return new ResponseEntity<Response>(new Response(){{
                 setStatus("SUCCESS");
                 setData(tripDetails);

@@ -91,6 +91,7 @@ public class TripServiceImpl implements TripService{
                 setData(trips);
                 setMessage("Trip with trip_id: " + trip_id);
                 setStatus("SUCCESS");
+                setMessage("Trip fetched successfully");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.warn("Request: TripService Implementation" + "method: viewTrip" + " error " + e.getLocalizedMessage());
@@ -109,6 +110,7 @@ public class TripServiceImpl implements TripService{
             return new ResponseEntity<Response>(new Response(){{
                 setData(trips);
                 setStatus("SUCCESS");
+                setMessage("Trips fetched successfully");
             }}, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             logger.warn("Request: TripService Implementation" + "method: viewAllTrip" + " error " + e.getLocalizedMessage());

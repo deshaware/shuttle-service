@@ -12,9 +12,7 @@ public interface TripDetailService {
 
     // public ResponseEntity<Response> getTripHistoryByUser(String email);
 
-    // public ResponseEntity<Response> getAllTripDetails(long trip_id); // accessible to admins
-
-    // public ResponseEntity<Response> getTripDetail(long trip_id);
+    public ResponseEntity<Response> getTripDetail(long trip_detail_id);
 
     public ResponseEntity<Response> startTrip(long trip_id); // accessible to drivers
 
