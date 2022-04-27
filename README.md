@@ -22,7 +22,7 @@ credits to students to avoid misuse of the system.
 
 ## System Architecture
 
-![Backend Architecture](ShuttleService-Backend.pdf)
+![Backend Architecture](src/main/resources/static/SystemArchitecture.png)
 
 ## Use Case:
 
