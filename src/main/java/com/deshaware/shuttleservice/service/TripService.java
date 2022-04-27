@@ -1,8 +1,6 @@
 package com.deshaware.shuttleservice.service;
 
 import com.deshaware.shuttleservice.dto.TripRequest;
-import com.deshaware.shuttleservice.model.TripDetail;
-// import com.deshaware.shuttleservice.model.Trip;
 import com.deshaware.shuttleservice.response.Response;
 
 import org.springframework.http.ResponseEntity;

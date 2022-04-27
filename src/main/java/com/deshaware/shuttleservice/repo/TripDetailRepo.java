@@ -1,11 +1,8 @@
 package com.deshaware.shuttleservice.repo;
 
 import java.util.HashSet;
-import java.util.List;
 
 import com.deshaware.shuttleservice.model.TripDetail;
-import com.deshaware.shuttleservice.model.TripDetailStatus;
-import com.deshaware.shuttleservice.model.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

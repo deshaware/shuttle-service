@@ -3,10 +3,7 @@ package com.deshaware.shuttleservice.repo;
 import java.time.Instant;
 import java.util.List;
 
-// import java.util.Optional;
-
 import com.deshaware.shuttleservice.model.Trip;
-import com.deshaware.shuttleservice.model.TripStatus;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

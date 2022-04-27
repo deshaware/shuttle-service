@@ -2,12 +2,9 @@ package com.deshaware.shuttleservice.service;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.ObjDoubleConsumer;
 
 import javax.transaction.Transactional;
 
-import com.deshaware.shuttleservice.dto.TripRequest;
 import com.deshaware.shuttleservice.model.*;
 import com.deshaware.shuttleservice.repo.ShuttleRepo;
 import com.deshaware.shuttleservice.repo.TripDetailRepo;

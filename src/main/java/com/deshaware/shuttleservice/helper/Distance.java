@@ -3,7 +3,6 @@ package com.deshaware.shuttleservice.helper;
 import java.util.List;
 
 import com.deshaware.shuttleservice.model.TripDetail;
-import com.deshaware.shuttleservice.model.User;
 
 class Coordinate {
     public double lat;

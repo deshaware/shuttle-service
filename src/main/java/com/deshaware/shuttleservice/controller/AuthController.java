@@ -2,15 +2,11 @@ package com.deshaware.shuttleservice.controller;
 
 import com.deshaware.shuttleservice.dto.RegisterRequest;
 import com.deshaware.shuttleservice.response.Response;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import lombok.AllArgsConstructor;
-
 import com.deshaware.shuttleservice.service.AuthServiceImpl;
-import static org.springframework.http.HttpStatus.*;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/auth")
