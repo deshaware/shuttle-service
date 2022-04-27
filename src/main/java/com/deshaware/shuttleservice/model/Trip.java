@@ -11,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Null;
+
+import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +31,11 @@ public class Trip {
     private Instant scheduled_on;
     private double start_lang;
     private double start_lat;
+
+    @Nullable
+    private double curr_lon;
+    @Nullable
+    private double curr_lat;
 
     @Enumerated(EnumType.STRING)
     private TripStatus trip_status;
