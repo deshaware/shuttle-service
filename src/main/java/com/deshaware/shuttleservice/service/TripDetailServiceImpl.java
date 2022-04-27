@@ -5,7 +5,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.deshaware.shuttleservice.model.*;
+import com.deshaware.shuttleservice.model.TripDetail;
+import com.deshaware.shuttleservice.model.TripDetailStatus;
+import com.deshaware.shuttleservice.model.Trip;
+import com.deshaware.shuttleservice.model.Role;
+import com.deshaware.shuttleservice.model.TripStatus;
+import com.deshaware.shuttleservice.model.User;
 import com.deshaware.shuttleservice.repo.ShuttleRepo;
 import com.deshaware.shuttleservice.repo.TripDetailRepo;
 import com.deshaware.shuttleservice.repo.TripRepo;
