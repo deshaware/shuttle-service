@@ -10,10 +10,14 @@ import java.util.List;
 import com.deshaware.shuttleservice.repo.TripDetailRepo;
 import com.deshaware.shuttleservice.repo.TripRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Transactional
+@Service
 public class NotificationServiceFacadeImpl implements NotificationServiceFacade {
 
     final static Logger logger = LogManager.getLogger(TripServiceImpl.class);
@@ -24,15 +28,17 @@ public class NotificationServiceFacadeImpl implements NotificationServiceFacade 
     TripDetailRepo tripDetailsRepo;
 
     // Facade running current trip service
-    CurrentTripUserService currentTripUserService;
+    @Autowired
+    CurrentTripUserServiceAdapterImpl currentTripUserService;
 
     @Override
-    public void pushLocation(long trip_id, double lat, double lon){
+    public ResponseEntity<?> pushLocation(long trip_id, double lat, double lon){
         try {
             logger.info("Current location updated for trip: " + trip_id + " is " + lat + " " +lon);
             Trip trip = tripRepo.findById(trip_id).get();
-            // update current users
-
+            if (trip.equals(null)) {
+                throw new Exception("Error in pushing location");
+            }
             trip.setCurr_lat(lat);
             trip.setCurr_lon(lon);
             tripRepo.save(trip);
@@ -44,11 +50,10 @@ public class NotificationServiceFacadeImpl implements NotificationServiceFacade 
             for (TripDetail tripDetail : tripDetailList) {
                 this.updateTripDetailEstimation(tripDetail, vehicleLocation);
             }
-
-            
-
+            return new ResponseEntity<>("Location updated successfully",HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error in pushing location: " + trip_id + " is " + lat + " " +lon);
+            return new ResponseEntity<>("Error in pushing location:" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
