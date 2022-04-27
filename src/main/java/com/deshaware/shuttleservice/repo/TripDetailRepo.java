@@ -1,6 +1,7 @@
 package com.deshaware.shuttleservice.repo;
 
 import java.util.HashSet;
+import java.util.List;
 
 import com.deshaware.shuttleservice.model.TripDetail;
 
@@ -21,9 +22,20 @@ public interface TripDetailRepo extends JpaRepository<TripDetail, Long>{
         @Param("email") String email
     );
 
+    @Query(value = "SELECT td.* FROM trip_detail td JOIN trip t ON t.trip_id = td.trip_id " +
+    "WHERE td.trip_id = :trip_id AND t.trip_status = :status",
+        nativeQuery=true)
+    List<TripDetail> findTripDetailByStatusAndTripId(
+    @Param("trip_id") long trip_id, 
+    @Param("status") String status
+    );
+    
+
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE trip_detail td SET td.status= :tripDetailStatus WHERE td.trip_detail_id IN ( :trip_details_ids )",
      nativeQuery=true)
     void setStatusForTripDetails(@Param("trip_details_ids") HashSet<Long> trip_ids, String tripDetailStatus );
+
+    
     
 }
