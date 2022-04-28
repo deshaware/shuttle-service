@@ -30,7 +30,7 @@ public class Shuttle {
      * can be added
      */
     @Enumerated(EnumType.ORDINAL)
-    private Vehicle suttle_type;
+    private Vehicle shuttle_type;
 
     // Shuttle Description
     /**
@@ -45,5 +45,12 @@ public class Shuttle {
     private int capacity;
     private Instant modified;
     private boolean enabled;
+
+    public String toJSONString(){
+        return 
+        "{\"shuttle_id\" : " + this.shuttle_id+ ", {\"shuttle_desc\" : " + 
+        this.shuttle_desc+ ", {\"capacity\" : " + this.capacity 
+        + ", {\"shuttle_type\" : " + this.shuttle_type+ "}";
+    }
 
 }

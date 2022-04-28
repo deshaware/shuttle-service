@@ -39,7 +39,7 @@ public class ShuttleServiceImpl implements ShuttleService {
             newShuttle.setCapacity(shuttle.getCapacity());
             newShuttle.setShuttle_id(shuttle.getShuttle_id().toLowerCase());
             newShuttle.setShuttle_desc(shuttle.getShuttle_desc());
-            newShuttle.setSuttle_type(shuttle.getShuttle_type());
+            newShuttle.setShuttle_type(shuttle.getShuttle_type());
             newShuttle.setEnabled(true);
             newShuttle.setModified(Instant.now());
             shuttleRepo.save(newShuttle);
