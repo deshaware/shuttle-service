@@ -24,7 +24,6 @@ public class AuthController {
         return authService.getAllUsers(); 
     }
 
-
     @GetMapping("/isUserActive/{email}")
     public ResponseEntity<Response> isUserActive(@PathVariable("email") String email) { // transfered from DTO
         return authService.isUserActive(email); 
@@ -35,7 +34,11 @@ public class AuthController {
         return authService.deactiveUser(email);
    }
 
-   
+   @DeleteMapping("/delete/{email}")
+   public ResponseEntity<Response> deleteUser(@PathVariable("email") String email) { // transfered from DTO
+        return authService.deleteUser(email);
+   }
+
 
 
 }
