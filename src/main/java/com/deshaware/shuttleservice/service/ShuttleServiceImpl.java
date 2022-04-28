@@ -71,7 +71,7 @@ public class ShuttleServiceImpl implements ShuttleService {
                 setData(shuttleList);
                 setMessage("Shuttle Fetched Succesfully");
                 setStatus("SUCCESS");
-            }} , HttpStatus.ACCEPTED);
+            }} , HttpStatus.OK);
             
         } catch (Exception e) {
             logger.error("Error while fetching shuttle");

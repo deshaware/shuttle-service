@@ -32,7 +32,7 @@ public class ShuttleController {
         }
     }
 
-    @GetMapping("viewAllShuttle")
+    @GetMapping("/viewAllShuttle")
     public ResponseEntity<?> viewAllShuttle(){
         try {
             return shuttleService.viewAllShuttle();
@@ -41,7 +41,7 @@ public class ShuttleController {
         }
     }
     
-    @DeleteMapping("delete/{shuttle_id}")
+    @DeleteMapping("/delete/{shuttle_id}")
     public ResponseEntity<?> deleteShuttle(@PathVariable("shuttle_id") String shuttle_id){
         try {
             return shuttleService.deleteShuttle(shuttle_id.toLowerCase());
