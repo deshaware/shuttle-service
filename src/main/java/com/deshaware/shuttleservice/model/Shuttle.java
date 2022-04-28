@@ -48,9 +48,9 @@ public class Shuttle {
 
     public String toJSONString(){
         return 
-        "{\"shuttle_id\" : " + this.shuttle_id+ ", {\"shuttle_desc\" : " + 
-        this.shuttle_desc+ ", {\"capacity\" : " + this.capacity 
-        + ", {\"shuttle_type\" : " + this.shuttle_type+ "}";
+        "{\"shuttle_id\" : \"" + this.shuttle_id+ "\", \"shuttle_desc\" : \"" + 
+        this.shuttle_desc+ "\", \"capacity\" : " + this.capacity 
+        + "\", \"shuttle_type\" : \"" + this.shuttle_type.toString().toLowerCase()+ "\"}";
     }
 
 }
