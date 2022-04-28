@@ -40,11 +40,11 @@ public class TripServiceImpl implements TripService{
         try {
             User driver = userRepo.findDriverByEmail(tripRequest.getDriver_id().toLowerCase());
             if (driver == null) {
-                throw new Error("Driver does not exist");
+                throw new Exception("Driver does not exist");
             }
             Optional<Shuttle> shuttle = shuttleRepo.findById(tripRequest.getShuttle_id().toLowerCase());
             if (shuttle.isEmpty()) {
-                throw new Error("Shuttle does not exist");
+                throw new Exception("Shuttle does not exist");
             }
             // logic to prevent duplicate trips
             List<Trip> trip = tripRepo.findDuplicateTrip(tripRequest.getShuttle_id(), tripRequest.getScheduled_on());
@@ -85,7 +85,7 @@ public class TripServiceImpl implements TripService{
             Optional<Trip> trips = tripRepo.findById(trip_id);
 
             if (!trips.isPresent()) {
-                throw new Error("Trip does not exist with trip_id: " + trip_id);
+                throw new Exception("Trip does not exist with trip_id: " + trip_id);
             }
             return new ResponseEntity<Response>(new Response(){{
                 setData(trips);
@@ -127,7 +127,7 @@ public class TripServiceImpl implements TripService{
             // validate trip data
             Trip trip = tripRepo.findTripById(trip_id);
             if (trip == null) {
-                throw new Error("No trip found with trip_id: " + trip_id);
+                throw new Exception("No trip found with trip_id: " + trip_id);
             }
 
             // if driver is updated
@@ -136,7 +136,7 @@ public class TripServiceImpl implements TripService{
                 User driver = userRepo.findDriverByEmail(tripRequest.getDriver_id().toLowerCase());
                 // Optional<User> driver = userRepo.findByEmail(tripRequest.getDriver_id().toLowerCase());
                 if (driver == null) {
-                    throw new Error("Invalid Driver, Trip Cannot update!");
+                    throw new Exception("Invalid Driver, Trip Cannot update!");
                 }
                 trip.setDriver_id(driver);
             }
@@ -145,7 +145,7 @@ public class TripServiceImpl implements TripService{
             if (tripRequest.getShuttle_id() != null) {
                 Optional<Shuttle> shuttle = shuttleRepo.findById(tripRequest.getShuttle_id().toLowerCase());
                 if (!shuttle.isPresent()) {
-                    throw new Error("Invalid Shuttle, Trip Cannot update!");
+                    throw new Exception("Invalid Shuttle, Trip Cannot update!");
                 }
                 trip.setShuttle_id(shuttle.get());
             }

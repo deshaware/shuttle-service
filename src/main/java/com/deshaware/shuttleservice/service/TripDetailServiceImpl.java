@@ -46,12 +46,12 @@ public class TripDetailServiceImpl implements TripDetailService{
             // validate trip data
             Trip trip = tripRepo.findActiveTripById(trip_id);
             if (trip == null) {
-                throw new Error("No active trip found with trip_id: " + trip_id);
+                throw new Exception("No active trip found with trip_id: " + trip_id);
             }
 
             User user = userRepo.findActiveUser(email);
             if (user == null || !user.isEnabled() || user.getRole() != Role.USER) {
-                throw new Error("Unable to enroll user : " + email);
+                throw new Exception("Unable to enroll user : " + email);
             }
 
             // check trip user
@@ -59,19 +59,19 @@ public class TripDetailServiceImpl implements TripDetailService{
 
             // check if user exist in the set
             if (checkTripDetail != null && trip.getTrip_users().contains(checkTripDetail.getTrip_detail_id())) {
-                throw new Error("User: " + email +" has already registered for the trip : " + trip_id);
+                throw new Exception("User: " + email +" has already registered for the trip : " + trip_id);
             }
 
             // check if capacity allows
             if (!trip.canEnroll()) {
-                throw new Error("Shuttle is full" + trip_id);
+                throw new Exception("Shuttle is full" + trip_id);
             }
 
             // check all exist
             if (tripDetail.getEnd_lat() == 0 || tripDetail.getEnd_long() == 0
             || tripDetail.getStart_long() == 0 || tripDetail.getStart_lat() == 0
             ){
-                throw new Error("Problems with Start and End coordinates ");
+                throw new Exception("Problems with Start and End coordinates ");
             }
 
             TripDetail newTripDetail = new TripDetail();
@@ -111,12 +111,12 @@ public class TripDetailServiceImpl implements TripDetailService{
             // validate trip data
             Trip trip = tripRepo.findActiveTripById(trip_id);
             if (trip == null) {
-                throw new Error("No active trip found with trip_id: " + trip_id);
+                throw new Exception("No active trip found with trip_id: " + trip_id);
             }
 
             User user = userRepo.findActiveUser(email);
             if (user == null || !user.isEnabled() || user.getRole() != Role.USER) {
-                throw new Error("Invalid user or user not active : " + email);
+                throw new Exception("Invalid user or user not active : " + email);
             }
 
             // check trip user
@@ -124,12 +124,12 @@ public class TripDetailServiceImpl implements TripDetailService{
 
             // check if user exist in the set
             if (checkTripDetail == null) {
-                throw new Error("User "+ email +" is not registerd for the trip:" + trip_id);
+                throw new Exception("User "+ email +" is not registerd for the trip:" + trip_id);
             }
 
             // check if the trip is started or not
             if (trip.getTrip_status() != TripStatus.INTIATED) {
-                throw new Error("Cannot unenroll, trip may have already started or over. Trip: " + trip_id);
+                throw new Exception("Cannot unenroll, trip may have already started or over. Trip: " + trip_id);
             }
 
             // remove from the trip hashset
@@ -169,7 +169,7 @@ public class TripDetailServiceImpl implements TripDetailService{
             logger.info("Start trip: " + trip_id);
             Trip trip = tripRepo.findActiveTripById(trip_id);
             if (trip == null) {
-                throw new Error("No active trip found with trip_id: " + trip_id);
+                throw new Exception("No active trip found with trip_id: " + trip_id);
             }
 
             // no need, we can just take users from the trip and start them off
@@ -205,7 +205,7 @@ public class TripDetailServiceImpl implements TripDetailService{
             logger.info("endTrip trip: " + trip_id);
             Trip trip = tripRepo.findTripByStatusAndId(trip_id, TripStatus.IN_PROGRESS.toString());
             if (trip == null) {
-                throw new Error("No active trip found with trip_id: " + trip_id);
+                throw new Exception("No active trip found with trip_id: " + trip_id);
             }
 
             // no need, we can just take users from the trip and start them off

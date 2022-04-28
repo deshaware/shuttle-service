@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
             logger.info("Signup user");
             Optional<User> check = userRepo.findByEmail(regRequest.getEmail());
             if (check.isPresent()) {
-                throw new Error("User already exist with email:" + regRequest.getEmail());
+                throw new Exception("User already exist with email:" + regRequest.getEmail());
             } else {
                 User user = new User();
                 user.setEmail(regRequest.getEmail());
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         try{
             User user = userRepo.findActiveUser(email);
             if (user == null) {
-                throw new Error("User not found: " + email);
+                throw new Exception("User not found: " + email);
             }
             String message = user.isEnabled() ? "Active" : "Inactive";
             return new ResponseEntity<Response>(new Response(){{
@@ -109,10 +109,10 @@ public class AuthServiceImpl implements AuthService {
             logger.info("Deactivate User");
             User user = userRepo.findActiveUser(email);
             if (user == null) {
-                throw new Error("User not found: " + email);
+                throw new Exception("User not found: " + email);
             }
             if (!user.isEnabled()) {
-                throw new Error("User is already deactivated!");
+                throw new Exception("User is already deactivated!");
             }
 
             user.setEnabled(false);
@@ -136,7 +136,7 @@ public class AuthServiceImpl implements AuthService {
             logger.info("Delete user" + email);
             User user = userRepo.findActiveUser(email);
             if (user == null) {
-                throw new Error("User not found: " + email);
+                throw new Exception("User not found: " + email);
             }
            userRepo.deleteByEmail(email);
             return new ResponseEntity<Response>(new Response(){{
@@ -150,7 +150,7 @@ public class AuthServiceImpl implements AuthService {
                 setData(e.getMessage());
                 setStatus("ERROR");
                 setMessage("Failed to delete user");
-            }}, HttpStatus.BAD_REQUEST);
+            }}, HttpStatus.NOT_FOUND);
         }
     }
 

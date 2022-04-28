@@ -30,7 +30,7 @@ public class ShuttleServiceImpl implements ShuttleService {
             Optional<Shuttle> checkShuttle = shuttleRepo.findById(shuttle.getShuttle_id());
             if (checkShuttle.isPresent()) {
                 // throw error
-                // throw new Error("shuttle with " + shuttle.getShuttle_id() + " is already exist");
+                // throw new Exception("shuttle with " + shuttle.getShuttle_id() + " is already exist");
                 return new ResponseEntity<>("Already exist", HttpStatus.CONFLICT);
             }
             Shuttle newShuttle = new Shuttle();
@@ -63,7 +63,7 @@ public class ShuttleServiceImpl implements ShuttleService {
     public ResponseEntity<?> deleteShuttle(String shuttle_id) {
         Optional<Shuttle> getShuttle = shuttleRepo.findById(shuttle_id);
         if (!getShuttle.isPresent()) {
-            throw new Error("No Shuttle Found with id" + shuttle_id);
+            throw new Exception("No Shuttle Found with id" + shuttle_id);
         }
         shuttleRepo.deleteById(shuttle_id);
         return new ResponseEntity<>("Shuttle Deleted Succesfully",HttpStatus.ACCEPTED);
