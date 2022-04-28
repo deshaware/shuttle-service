@@ -1,6 +1,5 @@
 package com.deshaware.shuttleservice.tests;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -8,20 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import com.deshaware.shuttleservice.controller.AuthController;
 import com.deshaware.shuttleservice.dto.RegisterRequest;
 import com.deshaware.shuttleservice.model.Role;
 
@@ -32,9 +23,6 @@ import com.deshaware.shuttleservice.model.Role;
 public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private AuthController authController;
 
     RegisterRequest newUserRegisterReq;
     
