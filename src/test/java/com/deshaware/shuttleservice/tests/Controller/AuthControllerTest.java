@@ -1,4 +1,4 @@
-package com.deshaware.shuttleservice.tests;
+package com.deshaware.shuttleservice.tests.Controller;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
