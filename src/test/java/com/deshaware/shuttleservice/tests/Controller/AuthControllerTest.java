@@ -67,7 +67,6 @@ public class AuthControllerTest {
         this.mockMvc.perform(
             delete("/api/auth/delete/" + email))
             .andExpect(status().isNoContent());
-            // .andExpect(jsonPath("$."))
         
     }
 
