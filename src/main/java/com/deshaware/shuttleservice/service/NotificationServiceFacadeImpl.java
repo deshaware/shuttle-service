@@ -21,13 +21,14 @@ import org.apache.logging.log4j.Logger;
 public class NotificationServiceFacadeImpl implements NotificationServiceFacade {
 
     final static Logger logger = LogManager.getLogger(TripServiceImpl.class);
+
+    // Facade Pattern using multiple services interfaces inside the class NotificationServiceFacadeImpl
     @Autowired
     TripRepo tripRepo;
 
     @Autowired
     TripDetailRepo tripDetailsRepo;
 
-    // Facade running current trip service
     @Autowired
     CurrentTripUserServiceAdapterImpl currentTripUserService;
 
