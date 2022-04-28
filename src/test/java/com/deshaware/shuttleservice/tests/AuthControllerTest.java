@@ -67,9 +67,30 @@ public class AuthControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(user.toString()))
-            .andExpect( status().isAccepted() )
+            .andExpect( status().isCreated() )
             .andExpect(jsonPath("$.message").value("User Created Successfully!"))
             ;
 
     }
+
+    @Test
+    public void deleteUser() throws Exception{
+        String email = "ishan@gmail.com";
+        this.mockMvc.perform(
+            delete("/api/auth/delete/" + email))
+            .andExpect(status().isNoContent());
+            // .andExpect(jsonPath("$."))
+        
+    }
+
+    @Test
+    public void deleteUserFail() throws Exception{
+        String email = "ishan@gmail.com";
+        this.mockMvc.perform(
+        delete("/api/auth/delete/" + email))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value("Failed to delete user"))
+        .andExpect(jsonPath("$.data").value("User not found: " + email));
+    }
+
 }
