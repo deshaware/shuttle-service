@@ -49,14 +49,14 @@ public class ShuttleControllerTest {
 		shuttleRequest.setShuttle_desc("A test shuttle");
 		shuttleRequest.setCapacity(10);
 
-		finalShuttle = new ShuttleRequest("orange-loop", Vehicle.CAR, "A test shuttle", 12);
+		finalShuttle = new ShuttleRequest("manley-loop", Vehicle.CAR, "A test shuttle", 12);
 
 	}
 
 	@Test
 	public void testAddShuttle() throws Exception{	
 		System.out.println(shuttleRequest.toJSONString());
-		MvcResult res =  this.mockMvc.perform(
+		this.mockMvc.perform(
             post("/api/shuttle/addShuttle")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
