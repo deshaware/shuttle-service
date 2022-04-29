@@ -24,30 +24,19 @@ public class ShuttleController {
 
     @PostMapping("/addShuttle")
     public ResponseEntity<?> addShuttle(@RequestBody ShuttleRequest shuttleRequest) { // transfered from DTO
-        try {
-            return shuttleService.addShuttle(shuttleRequest);   
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<String>("Failed " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return shuttleService.addShuttle(shuttleRequest);   
     }
 
     @GetMapping("/viewAllShuttle")
     public ResponseEntity<?> viewAllShuttle(){
-        try {
-            return shuttleService.viewAllShuttle();
-        } catch (Exception e) {
-            return new ResponseEntity<>("Some error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return shuttleService.viewAllShuttle();
+
     }
     
     @DeleteMapping("/delete/{shuttle_id}")
     public ResponseEntity<?> deleteShuttle(@PathVariable("shuttle_id") String shuttle_id){
-        try {
-            return shuttleService.deleteShuttle(shuttle_id.toLowerCase());
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error while deleting", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return shuttleService.deleteShuttle(shuttle_id.toLowerCase());
+
     }
 
 
