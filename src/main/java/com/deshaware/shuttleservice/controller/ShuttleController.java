@@ -2,7 +2,6 @@ package com.deshaware.shuttleservice.controller;
 
 import com.deshaware.shuttleservice.dto.ShuttleRequest;
 import com.deshaware.shuttleservice.service.ShuttleService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,14 +29,11 @@ public class ShuttleController {
     @GetMapping("/viewAllShuttle")
     public ResponseEntity<?> viewAllShuttle(){
         return shuttleService.viewAllShuttle();
-
     }
     
     @DeleteMapping("/delete/{shuttle_id}")
     public ResponseEntity<?> deleteShuttle(@PathVariable("shuttle_id") String shuttle_id){
         return shuttleService.deleteShuttle(shuttle_id.toLowerCase());
-
     }
-
 
 }
