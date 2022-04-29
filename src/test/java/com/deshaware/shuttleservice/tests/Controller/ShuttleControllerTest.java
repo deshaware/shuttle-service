@@ -37,7 +37,7 @@ public class ShuttleControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-	ShuttleRequest shuttleRequest;
+	ShuttleRequest shuttleRequest, finalShuttle;
 	String shuttle_id;
 
     @BeforeAll
@@ -45,9 +45,12 @@ public class ShuttleControllerTest {
 	{
 		shuttleRequest = new ShuttleRequest();
 		shuttleRequest.setShuttle_id("yello-loop");
-		shuttleRequest.setCapacity(10);
-		shuttleRequest.setShuttle_desc("A test shuttle");
 		shuttleRequest.setShuttle_type(Vehicle.CAR);
+		shuttleRequest.setShuttle_desc("A test shuttle");
+		shuttleRequest.setCapacity(10);
+
+		finalShuttle = new ShuttleRequest("orange-loop", Vehicle.CAR, "A test shuttle", 12);
+
 	}
 
 	@Test
@@ -62,8 +65,6 @@ public class ShuttleControllerTest {
             .andExpect(jsonPath("$.message").value("Shuttle Added Succesfully"))
 			.andReturn()
             ;
-		System.out.println("res is ");
-		System.out.println(res);
 	}
 
 	@Test
@@ -83,5 +84,17 @@ public class ShuttleControllerTest {
             .andExpect(status().isAccepted());
 	}
 
+	@Test
+	public void createShuttleForApp() throws Exception {
+		this.mockMvc.perform(
+            post("/api/shuttle/addShuttle")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(finalShuttle.toJSONString()))
+            .andExpect( status().isCreated() )
+            .andExpect(jsonPath("$.message").value("Shuttle Added Succesfully"))
+			.andReturn()
+            ;
+	}
 
 }

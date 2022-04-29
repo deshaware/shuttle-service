@@ -2,11 +2,13 @@ package com.deshaware.shuttleservice.dto;
 
 import com.deshaware.shuttleservice.model.Vehicle;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ShuttleRequest {
     private String shuttle_id;
     private Vehicle shuttle_type;
