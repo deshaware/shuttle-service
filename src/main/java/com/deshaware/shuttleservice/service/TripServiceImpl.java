@@ -69,6 +69,7 @@ public class TripServiceImpl implements TripService{
             return new ResponseEntity<Response>(new Response(){{
                 setData(new_trip);
                 setStatus("SUCCESS");
+                setMessage("Trip added successfully!");
             }} ,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<Response>(new Response(){{

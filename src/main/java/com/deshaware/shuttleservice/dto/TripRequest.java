@@ -4,11 +4,13 @@ import java.time.Instant;
 
 import com.deshaware.shuttleservice.model.TripStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class TripRequest {
     /**
      *  driver email
@@ -20,4 +22,13 @@ public class TripRequest {
     private double start_lang;
     private double start_lat;
     private TripStatus trip_status;
+
+    public String toJSONString(){
+        return "{ \"driver_id\": \""+ this.driver_id + 
+            "\", \"shuttle_id\": \"" + this.shuttle_id + 
+            "\", \"scheduled_on\": \" " + this.scheduled_on + 
+            "\", \"start_lang\": \"" + this.start_lang + 
+            "\", \"start_lat\": \"" + this.start_lat + 
+            "\" }";
+    }
 }
