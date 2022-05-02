@@ -80,4 +80,31 @@ public class AuthControllerTest {
         .andExpect(jsonPath("$.data").value("User not found: " + email));
     }
 
+
+    @Test
+    public void driverTestPersist1() throws Exception {
+        Object user = "{\"email\": \"apurv@gmail.com\", \"name\": \"Apurv Rajdeep Mhatre\",\"role\": \"driver\", \"password\": \"12345\"}";
+        this.mockMvc.perform(
+            post("/api/auth/signup")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(user.toString()))
+            .andExpect( status().isCreated() )
+            .andExpect(jsonPath("$.message").value("User Created Successfully!"))
+            ;
+    }
+
+
+    @Test
+    public void driverTestPersist2() throws Exception {
+        Object user = "{\"email\": \"navya@gmail.com\", \"name\": \"Navya Kiran\",\"role\": \"driver\", \"password\": \"123456\"}";
+        this.mockMvc.perform(
+            post("/api/auth/signup")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(user.toString()))
+            .andExpect( status().isCreated() )
+            .andExpect(jsonPath("$.message").value("User Created Successfully!"))
+            ;
+    }
 }
