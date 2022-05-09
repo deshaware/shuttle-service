@@ -8,6 +8,8 @@ import com.deshaware.shuttleservice.tests.Persist.PersistTrip;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ParseContext;
 import com.mysql.cj.xdevapi.JsonParser;
+
+import org.aspectj.lang.annotation.Before;
 import org.json.*;
 
 import org.springframework.http.MediaType;
@@ -42,7 +44,6 @@ public class TripControllerTest {
 	TripRequest tripRequest, tripRequest2, finalTripRequest;
 	MvcResult addTripRes;
 
-    @BeforeAll
 	public void initInput()
 	{
 		tripRequest = new TripRequest();
