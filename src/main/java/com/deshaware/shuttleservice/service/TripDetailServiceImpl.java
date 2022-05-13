@@ -104,6 +104,12 @@ public class TripDetailServiceImpl implements TripDetailService{
         }
     }
 
+    /**
+     * takes trip_id and email from client
+     * checks validity of email and trip_id
+     * once done, 
+     */
+
     @Override
     public ResponseEntity<Response> unenrollTrip(long trip_id, String email){
         try{
@@ -200,6 +206,13 @@ public class TripDetailServiceImpl implements TripDetailService{
     }
 
 
+    /**
+     * flow
+     * 1. check trip id
+     * 2. get all the trip_details_id
+     * 3. drop the last student and end trip
+     * 4. 
+     */
     public ResponseEntity<Response> endTrip(long trip_id){
         try {
             logger.info("endTrip trip: " + trip_id);
@@ -215,7 +228,7 @@ public class TripDetailServiceImpl implements TripDetailService{
 
             tripDetailRepo.setStatusForTripDetails(trip_users, TripDetailStatus.COMPLETED.toString());
             
-            // start trip
+            // end trip
             trip.setTrip_status(TripStatus.COMPLETED);
 
             // get distance api and return
