@@ -44,6 +44,7 @@ public class TripControllerTest {
 	TripRequest tripRequest, tripRequest2, finalTripRequest;
 	MvcResult addTripRes;
 
+	@BeforeAll
 	public void initInput()
 	{
 		tripRequest = new TripRequest();
@@ -60,12 +61,7 @@ public class TripControllerTest {
 		tripRequest2.setStart_lang(122.0377074);
 		tripRequest2.setStart_lat(-736.13336859);
 
-		finalTripRequest =  new TripRequest();
-		finalTripRequest.setDriver_id("navya@gmail.com");
-		finalTripRequest.setShuttle_id("manley-loop");
-		finalTripRequest.setScheduled_on( Instant.parse("2022-05-23T21:21:21Z"));
-		finalTripRequest.setStart_lang(55.0377074);
-		finalTripRequest.setStart_lat(-66.13336859);
+		
 	}
 
 	@Test
@@ -80,26 +76,17 @@ public class TripControllerTest {
             .andExpect(jsonPath("$.message").value("Trip added successfully!"))
 			.andReturn()
             ;
-		// System.out.println("ressss is ");
-		// System.out.println(JsonParser.parseDoc(addTripRes.getResponse().getContentAsString()));
-		// System.out.println(addTripRes);
-		// System.out.println("content is");
-		// System.out.println(this.addTripRes.getResponse().getContentAsString());
-		// // JsonObject json = JsonParser.parseJSON(addTripRes.getResponse().getContentAsString());
-		// JSONObject jsonObject = new JSONObject(addTripRes.getResponse().getContentAsString());
-		// System.out.println(jsonObject);
-		// System.out.println("status is");
-		// System.out.println(jsonObject.get("status"));
-		// System.out.println("trip is");
-		// System.out.println(jsonObject.getJSONObject("data").get("trip_id"));
-		// trip = new PersistTrip();
-		// trip.setTrip_id(jsonObject.getJSONObject("data").get("trip_id").toString());
-		// trip_id = jsonObject.getJSONObject("data").get("trip_id").toString();
 
 	}
 
 	@Test
 	public void testAddShuttlePositiveFinal() throws Exception {
+		finalTripRequest = new TripRequest();
+		finalTripRequest.setDriver_id("navya@gmail.com");
+		finalTripRequest.setShuttle_id("manley-loop");
+		finalTripRequest.setScheduled_on( Instant.parse("2022-05-23T21:21:21Z"));
+		finalTripRequest.setStart_lang(55.0377074);
+		finalTripRequest.setStart_lat(-66.13336859);
 		System.out.println(finalTripRequest.toJSONString());
 		this.mockMvc.perform(
             post("/api/trip/addTrip")
@@ -145,9 +132,6 @@ public class TripControllerTest {
         this.mockMvc.perform(
             delete("/api/trip/delete/" + trip_id))
             .andExpect(status().isAccepted());
-			// .andExc	"Trip "+ trip_id + " is deleted successully"
-	// }
-	
 	}
 
 }

@@ -62,6 +62,21 @@ public class AuthControllerTest {
     }
 
     @Test
+    public void signUpUserPersist() throws Exception {
+        Object user = "{\"email\": \"swapnil@gmail.com\", \"name\": \"Swapnil Ghanshyam Deshaware\",\"role\": \"user\", \"password\": \"12345\"}";
+        this.mockMvc.perform(
+            post("/api/auth/signup")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(user.toString()))
+            .andExpect( status().isCreated() )
+            .andExpect(jsonPath("$.message").value("User Created Successfully!"))
+            ;
+
+    }
+
+
+    @Test
     public void deleteUser() throws Exception{
         String email = "ishan@gmail.com";
         this.mockMvc.perform(
