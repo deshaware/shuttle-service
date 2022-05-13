@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import lombok.Data;
 
 @Data
-public class ResponseSuccess implements Serializable {
+public class ResponseSuccess extends Response{
     private HttpStatus httpStatus;
     private String status = "SUCCESS";
     private Instant processed_on;
